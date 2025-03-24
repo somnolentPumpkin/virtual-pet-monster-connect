@@ -41,17 +41,39 @@
         button:hover {
             background-color: #6a9f8f;
         }
-        #authToken {
-            margin-top: 20px;
-            word-wrap: break-word;
+        .auth-container {
+            display: none;
+            background-color: #f4f1de;
+            padding: 15px;
+            border-radius: 8px;
+            max-width: 80%;
+            margin: 20px auto;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .auth-token {
             font-size: 16px;
             background-color: #e07a5f;
             color: white;
             padding: 10px;
             border-radius: 5px;
-            display: none;
-            max-width: 80%;
-            margin: 20px auto;
+            word-break: break-all;
+            display: inline-block;
+            max-width: 90%;
+            font-weight: bold;
+        }
+        .copy-btn {
+            background-color: #3d405b;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .copy-btn:hover {
+            background-color: #2a2d44;
         }
         .disclaimer {
             margin-top: 20px;
@@ -66,7 +88,13 @@
     <h2>Authorize Twitch Chat Access</h2>
     <img src="" alt="Virtual Pet Monster Logo" class="logo">
     <button id="loginBtn">Login with Twitch</button>
-    <p id="authToken"></p>
+
+    <div id="authContainer" class="auth-container">
+        <p><strong>Auth Token:</strong></p>
+        <p class="auth-token" id="authToken"></p>
+        <button class="copy-btn" id="copyBtn">Copy</button>
+    </div>
+
     <p class="disclaimer">Disclaimer: This website will never store or log your authentication token.</p>
     <p class="disclaimer">This token is needed so that Virtual Pet Monster can let your Twitch chat interact with your pet using your own account. This way, you don’t have to share a global token, keeping things more secure and personalized.</p>
 
@@ -93,11 +121,19 @@
             const token = getAuthTokenFromUrl();
             if (token) {
                 const tokenElement = document.getElementById("authToken");
-                tokenElement.textContent = `Auth Token: ${token}`;
-                tokenElement.style.display = "block";
+                const authContainer = document.getElementById("authContainer");
+                tokenElement.textContent = token;
+                authContainer.style.display = "block";
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
         };
+
+        document.getElementById("copyBtn").addEventListener("click", () => {
+            const tokenText = document.getElementById("authToken").textContent;
+            navigator.clipboard.writeText(tokenText).then(() => {
+                alert("Auth token copied to clipboard!");
+            });
+        });
     </script>
 </body>
 </html>
