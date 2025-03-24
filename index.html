@@ -41,37 +41,17 @@
         button:hover {
             background-color: #6a9f8f;
         }
-        .token-container {
-            display: none;
+        #authToken {
             margin-top: 20px;
+            word-wrap: break-word;
+            font-size: 16px;
             background-color: #e07a5f;
             color: white;
             padding: 10px;
             border-radius: 5px;
+            display: none;
             max-width: 80%;
             margin: 20px auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-        }
-        .token-text {
-            font-family: monospace;
-            flex-grow: 1;
-            word-break: break-all;
-        }
-        .copy-btn {
-            background-color: #f4a261;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            font-size: 14px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .copy-btn:hover {
-            background-color: #e76f51;
         }
         .disclaimer {
             margin-top: 20px;
@@ -84,12 +64,9 @@
     
     <h1>Virtual Pet Monster</h1>
     <h2>Authorize Twitch Chat Access</h2>
-    <img src="./vpm.png" alt="Virtual Pet Monster Logo" class="logo">
+    <img src="" alt="Virtual Pet Monster Logo" class="logo">
     <button id="loginBtn">Login with Twitch</button>
-    <div id="tokenContainer" class="token-container">
-        <span id="authToken" class="token-text"></span>
-        <button id="copyBtn" class="copy-btn">Copy</button>
-    </div>
+    <p id="authToken"></p>
     <p class="disclaimer">Disclaimer: This website will never store or log your authentication token.</p>
     <p class="disclaimer">This token is needed so that Virtual Pet Monster can let your Twitch chat interact with your pet using your own account. This way, you don’t have to share a global token, keeping things more secure and personalized.</p>
 
@@ -115,20 +92,12 @@
         window.onload = () => {
             const token = getAuthTokenFromUrl();
             if (token) {
-                const tokenContainer = document.getElementById("tokenContainer");
                 const tokenElement = document.getElementById("authToken");
-                tokenElement.textContent = token;
-                tokenContainer.style.display = "flex";
+                tokenElement.textContent = `Auth Token: ${token}`;
+                tokenElement.style.display = "block";
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
         };
-
-        document.getElementById("copyBtn").addEventListener("click", () => {
-            const tokenText = document.getElementById("authToken").textContent;
-            navigator.clipboard.writeText(tokenText).then(() => {
-                alert("Token copied to clipboard!");
-            });
-        });
     </script>
 </body>
 </html>
