@@ -35,47 +35,41 @@
             border-radius: 8px;
             cursor: pointer;
             transition: background 0.3s;
-            display: block;
-            margin: 20px auto;
         }
         button:hover {
             background-color: #6a9f8f;
         }
-        .token-container {
-            background-color: #fff;
-            border: 2px solid #e07a5f;
-            border-radius: 8px;
-            padding: 15px;
-            display: flex;
+        .auth-container {
+            display: none;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            max-width: 90%;
-            margin: 20px auto;
-            flex-wrap: wrap;
+            margin-top: 20px;
+            background: #ffffff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
         }
-        .token-text {
+        #authToken {
             font-size: 16px;
-            font-weight: bold;
             background-color: #e07a5f;
             color: white;
             padding: 10px;
             border-radius: 5px;
+            font-family: monospace;
             word-break: break-all;
-            user-select: all;
         }
         .copy-btn {
             background-color: #3d405b;
-            color: white;
-            border: none;
             padding: 8px 12px;
             font-size: 14px;
             border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
         }
         .copy-btn:hover {
-            background-color: #2a2d44;
+            background-color: #2a2d45;
         }
         .disclaimer {
             margin-top: 20px;
@@ -83,20 +77,9 @@
             color: #6d6875;
         }
         @media (max-width: 600px) {
-            body {
-                margin: 10px;
-            }
-            button {
-                width: 80%;
-            }
-            .token-container {
+            .auth-container {
                 flex-direction: column;
-                align-items: center;
-                padding: 10px;
-            }
-            .token-text {
-                font-size: 14px;
-                padding: 8px;
+                gap: 5px;
             }
         }
     </style>
@@ -108,9 +91,9 @@
     <img src="./vpm.png" alt="Virtual Pet Monster Logo" class="logo">
     <button id="loginBtn">Login with Twitch</button>
 
-    <div id="authContainer" class="token-container" style="display: none;">
-        <span id="authToken" class="token-text"></span>
-        <button class="copy-btn" id="copyBtn">Copy</button>
+    <div id="authContainer" class="auth-container">
+        <span id="authToken"></span>
+        <button id="copyBtn" class="copy-btn">Copy</button>
     </div>
 
     <p class="disclaimer">Disclaimer: This website will never store or log your authentication token.</p>
@@ -138,20 +121,22 @@
         window.onload = () => {
             const token = getAuthTokenFromUrl();
             if (token) {
-                const tokenElement = document.getElementById("authToken");
                 const authContainer = document.getElementById("authContainer");
+                const tokenElement = document.getElementById("authToken");
                 tokenElement.textContent = token;
-                authContainer.style.display = "flex";
-                window.history.replaceState({}, document.title, window.location.pathname);
+                authContainer.style.display = "inline-flex";
             }
         };
 
         document.getElementById("copyBtn").addEventListener("click", () => {
-            const tokenText = document.getElementById("authToken").textContent;
-            navigator.clipboard.writeText(tokenText).then(() => {
+            const tokenElement = document.getElementById("authToken");
+            navigator.clipboard.writeText(tokenElement.textContent).then(() => {
                 alert("Token copied to clipboard!");
+            }).catch(err => {
+                console.error("Failed to copy token: ", err);
             });
         });
     </script>
+
 </body>
 </html>
