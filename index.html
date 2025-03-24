@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Pet Monster - Twitch Chat Token</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            text-align: center;
+            margin: 50px;
+            background-color: #f4f1de;
+            color: #3d405b;
+        }
+        h1 {
+            color: #e07a5f;
+        }
+        h2 {
+            color: #81b29a;
+            font-size: 20px;
+        }
+        .logo {
+            display: block;
+            margin: 0 auto 20px;
+            width: 256px;
+            height: 256px;
+            object-fit: contain;
+        }
+        button {
+            background-color: #81b29a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: block;
+            margin: 20px auto;
+        }
+        button:hover {
+            background-color: #6a9f8f;
+        }
+        #authToken {
+            margin-top: 20px;
+            word-wrap: break-word;
+            font-size: 16px;
+            background-color: #e07a5f;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+            max-width: 80%;
+            margin: 20px auto;
+        }
+        .disclaimer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #6d6875;
+        }
+    </style>
+</head>
+<body>
+    
+    <h1>Virtual Pet Monster</h1>
+    <h2>Authorize Twitch Chat Access</h2>
+    <img src="./vpm.png" alt="Virtual Pet Monster Logo" class="logo">
+    <button id="loginBtn">Login with Twitch</button>
+    <p id="authToken"></p>
+    <p class="disclaimer">Disclaimer: This website will never store or log your authentication token.</p>
+    <p class="disclaimer">This token is needed so that Virtual Pet Monster can let your Twitch chat interact with your pet using your own account. This way, you don’t have to share a global token, keeping things more secure and personalized.</p>
+
+    <script>
+        const clientId = "YOUR_TWITCH_CLIENT_ID";
+        const redirectUri = window.location.origin + window.location.pathname;
+        const scopes = "chat:read chat:edit";
+        const authUrl = `https://id.twitch.tv/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token&scope=${encodeURIComponent(scopes)}`;
+
+        document.getElementById("loginBtn").addEventListener("click", () => {
+            window.location.href = authUrl;
+        });
+
+        function getAuthTokenFromUrl() {
+            const hash = window.location.hash;
+            if (hash.includes("access_token")) {
+                const params = new URLSearchParams(hash.substring(1));
+                return params.get("access_token");
+            }
+            return null;
+        }
+
+        window.onload = () => {
+            const token = getAuthTokenFromUrl();
+            if (token) {
+                const tokenElement = document.getElementById("authToken");
+                tokenElement.textContent = `Auth Token: ${token}`;
+                tokenElement.style.display = "block";
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        };
+    </script>
+</body>
+</html>
