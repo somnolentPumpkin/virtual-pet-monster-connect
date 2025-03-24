@@ -8,7 +8,7 @@
         body {
             font-family: 'Comic Sans MS', 'Arial', sans-serif;
             text-align: center;
-            margin: 50px;
+            margin: 20px;
             background-color: #f4f1de;
             color: #3d405b;
         }
@@ -41,36 +41,38 @@
         button:hover {
             background-color: #6a9f8f;
         }
-        .auth-container {
-            display: none;
-            background-color: #f4f1de;
-            padding: 15px;
+        .token-container {
+            background-color: #fff;
+            border: 2px solid #e07a5f;
             border-radius: 8px;
-            max-width: 80%;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            max-width: 90%;
             margin: 20px auto;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            flex-wrap: wrap;
         }
-        .auth-token {
+        .token-text {
             font-size: 16px;
+            font-weight: bold;
             background-color: #e07a5f;
             color: white;
             padding: 10px;
             border-radius: 5px;
             word-break: break-all;
-            display: inline-block;
-            max-width: 90%;
-            font-weight: bold;
+            user-select: all;
         }
         .copy-btn {
             background-color: #3d405b;
             color: white;
             border: none;
-            padding: 5px 10px;
+            padding: 8px 12px;
             font-size: 14px;
             border-radius: 5px;
             cursor: pointer;
-            margin-left: 10px;
+            transition: background 0.3s;
         }
         .copy-btn:hover {
             background-color: #2a2d44;
@@ -79,6 +81,23 @@
             margin-top: 20px;
             font-size: 14px;
             color: #6d6875;
+        }
+        @media (max-width: 600px) {
+            body {
+                margin: 10px;
+            }
+            button {
+                width: 80%;
+            }
+            .token-container {
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+            }
+            .token-text {
+                font-size: 14px;
+                padding: 8px;
+            }
         }
     </style>
 </head>
@@ -89,9 +108,8 @@
     <img src="./vpm.png" alt="Virtual Pet Monster Logo" class="logo">
     <button id="loginBtn">Login with Twitch</button>
 
-    <div id="authContainer" class="auth-container">
-        <p><strong>Auth Token:</strong></p>
-        <p class="auth-token" id="authToken"></p>
+    <div id="authContainer" class="token-container" style="display: none;">
+        <span id="authToken" class="token-text"></span>
         <button class="copy-btn" id="copyBtn">Copy</button>
     </div>
 
@@ -123,7 +141,7 @@
                 const tokenElement = document.getElementById("authToken");
                 const authContainer = document.getElementById("authContainer");
                 tokenElement.textContent = token;
-                authContainer.style.display = "block";
+                authContainer.style.display = "flex";
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
         };
@@ -131,7 +149,7 @@
         document.getElementById("copyBtn").addEventListener("click", () => {
             const tokenText = document.getElementById("authToken").textContent;
             navigator.clipboard.writeText(tokenText).then(() => {
-                alert("Auth token copied to clipboard!");
+                alert("Token copied to clipboard!");
             });
         });
     </script>
